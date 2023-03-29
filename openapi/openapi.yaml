@@ -1,0 +1,149 @@
+## Subsistema_2: Gestión de los vehículos que son propiedad de los clientes
+## y que se reparan y/o revisan en el taller. 
+## Cada vehículo estará identificado de forma única por su VIN.
+
+openapi: 3.0.3
+info:
+  version: 1.1.0
+  title: '[AOS] Especificación API REST de un servicio'
+  description: '*Gestion de vehiculos'
+  license:
+    name: MIT
+    url: 'https://opensource.org/licenses/MIT'
+
+servers:
+  - url: http://127.0.0.1:80/api/v1
+
+tags:
+  - name: '🚗Vehiculos'
+    description: Gestion de vehiculos
+  - name: '👥 Clientes'
+    description: Gestion de clientes (propietarios de vehiculos)
+  - name: '🧰 Taller'
+    description: Reparacion y revisión de vehículos en el taller
+  - name: '🔍Identificación'
+    description: Identificación de vehículos de forma única por su VIN
+
+paths:
+  /vehiculos:
+    get:
+      summary: Obtiene todos los vehiculos
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción | Motivo                             |
+        | ------------| ------------| -----------------------------------|
+        | **200**     | OK          | Listado de vehiculos             |
+        | **404**     | NOT FOUND   | No hay ningun vehiculo     
+      operationId: vehiculo_cget
+      tags: ['🚗Vehiculos']
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/orderParam'
+        - $ref: '#/components/parameters/orderingParam'
+      responses:
+        '200':
+          description: Listado de vehiculos disponibles
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vehiculos:
+                    description: array de vehiculos
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Vehiculos'
+              examples:
+                vehiculos-example:
+                  $ref: '#/components/examples/vehiculos-example'
+        '404':
+            $ref: '#/components/responses/Response_404'
+
+    options:
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: vehiculos_coptions
+      tags: [ '🚗Vehiculos']
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+
+
+components:
+   headers:
+    ETag:
+      description: "Entity Tag (identificador único proporcionado para validación de caché)"
+      schema:
+        type: string
+        pattern: "[0-9a-f]*"
+        example:
+          33a64df551425fcc
+    Allow:
+      description: Lista de métodos HTTP soportados
+      schema:
+        type: string
+      example: GET, DELETE, PUT, OPTIONS
+    Location:
+      description: '`URI` del nuevo recurso'
+      schema:
+        type: string
+        format: uri
+        x-faker: internet.url
+        example:
+          https://example.com/api/v1/plataformas/P01-001-A
+
+  parameters:
+    vehiculoId:
+      name: vehiculo_id
+      in: path
+      description: Identificador único del Vehiculo
+      required: true
+      schema:
+        $ref: '#/components/schemas/Id_Vehiculo'
+    ifMatchParam:
+      name: If-Match
+      in: header
+      description: ETag actual del recurso que se desea modificar
+      required: true
+      schema:
+        type: string
+        pattern: "[0-9a-f]*"
+    orderParam:
+      name: order
+      in: query
+      description: 'Criterio de ordenación: `id` | `tipo_envergadura`'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: string
+        enum:
+          - id
+          - tipo_envergadura
+    orderingParam:
+      name: ordering
+      in: query
+      description: 'Ordenación: `ASC` | `DESC`'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: string
+        enum:
+          - ASC
+          - DESC
+    pageParam:
+      name: page
+      in: query
+      description: 'Número de página'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: integer
+        minimum: 1
+
