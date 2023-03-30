@@ -63,6 +63,36 @@ paths:
         '404':
             $ref: '#/components/responses/Response_404'
 
+    post:
+      summary: Añade un nuevo vehiculo
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción          | Motivo                                    |
+        | ------------| ---------------------| ------------------------------------------|
+        | **201**     | CREATED              | EL vehiculo ha sido creado                |
+        | **400**     | BAD REQUEST          | El identificador único ya existe          |
+        | **422**     | UNPROCESSABLE ENTITY | Falta alguno de los atributos obligatorios|
+        |             |                      | o el valor no está permitido              |
+      tags: [ '🚗Vehiculos' ]
+      operationId: vehiculos_post
+      requestBody:
+        $ref: '#/components/requestBodies/vehiculosRB'
+      responses:
+        '201':
+          description: Nuevo vehiculo creado
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehiculos'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '422':
+          $ref: '#/components/responses/Response_422'
+
     options:
       summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
       description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
@@ -75,9 +105,8 @@ paths:
             Allow:
               $ref: '#/components/headers/Allow'
 
-
 components:
-   headers:
+  headers:
     ETag:
       description: "Entity Tag (identificador único proporcionado para validación de caché)"
       schema:
@@ -99,6 +128,39 @@ components:
         example:
           https://example.com/api/v1/plataformas/P01-001-A
 
+  requestBodies:
+    vehiculosRB:
+      description: Información del nuevo vehiculo
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [ id, marca ]
+            properties:
+              id:
+                $ref: '#/components/schemas/Id_Vehiculo'
+              marca:
+                $ref: '#/components/schemas/Marca_Vehiculo'
+              estado:
+                $ref: '#/components/schemas/Estados_Vehiculos'
+    aeronaveRB:
+      description: Información de la nueva Aeronave
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              matrícula:
+                description: Matrícula de la aeronave
+                type: string
+                pattern: "^[A-Z]{1,2}-[A-Z]{3}$"
+                example: "EC-JGR"
+              envergadura:
+                $ref: '#/components/schemas/Envergadura_Aeronave'
+          example: { "matrícula": "EC-JGR", "envergadura": "B" }
+
   parameters:
     vehiculoId:
       name: vehiculo_id
@@ -118,14 +180,14 @@ components:
     orderParam:
       name: order
       in: query
-      description: 'Criterio de ordenación: `id` | `tipo_envergadura`'
+      description: 'Criterio de ordenación: `id` | `marca` | `color`'
       required: false
       allowEmptyValue: false
       schema:
         type: string
         enum:
           - id
-          - tipo_envergadura
+          - marca
     orderingParam:
       name: ordering
       in: query
@@ -147,3 +209,49 @@ components:
         type: integer
         minimum: 1
 
+  responses:
+    Response_400:
+      description: '`BAD REQUEST` El identificador único ya existe.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-400:
+              $ref: '#/components/examples/response-http-400'
+    Response_404:
+      description: '`NOT FOUND`: recurso no disponible'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-404:
+              $ref: '#/components/examples/response-http-404'
+    Response_409:
+      description: '`CONFLICT`: el recurso no reúne las condiciones adecuadas'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-404:
+              $ref: '#/components/examples/response-http-409'
+    Response_412:
+      description: '`PRECONDITION FAILED`: El ETag proporcionado no está actualizado'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-412:
+              $ref: '#/components/examples/response-http-412'
+    Response_422:
+      description: '`UNPROCESSABLE ENTITY` Falta alguno de los atributos obligatorios o son incorrectos.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-422:
+              $ref: '#/components/examples/response-http-422'
