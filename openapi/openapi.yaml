@@ -193,7 +193,97 @@ paths:
             Allow:
               $ref: '#/components/headers/Allow'
   
-  /vehiculos/{vehiculo_marca}:
+
+  /vehiculos/{matricula}:
+    parameters:
+      - $ref: '#/components/parameters/Matricula'
+    get:
+      summary: Obtiene un vehiculo identificado por `Matricula`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción | Motivo                             |
+        | ------------| ------------| -----------------------------------|
+        | **200**     | OK          | Si la matricula existe            |
+        | **404**     | NOT FOUND   | Si no existe la matricula         |
+      operationId: vehiculos_matricula_get
+      tags: [ '🚗Vehiculos' ]
+      responses:
+        '200':
+          description: Vehiculo
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehiculos'
+        '404':
+          $ref: '#/components/responses/Response_404'
+
+    delete:
+      summary: Elimina el vehiculo identificado por `vehiculoMatricula`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code      | Descripción | Motivo                                            |
+        | ---------------- | ------------| ------------------------------------------        |
+        | **204**          | NO CONTENT  | La matricula del vehiculo existía y ha sido eliminada |
+        | **404**          | NOT FOUND   | Si la matricula del vehiculo no existe                |
+      operationId: vehiculo_matricula_delete
+      tags: [ '🚗Vehiculos' ]
+      responses:
+        '204':
+          description: Vehiculo eliminada &lt;Cuerpo de la respuesta vacío&gt;
+        '404':
+          $ref: '#/components/responses/Response_404'
+
+    put:
+      tags: [ '🚗Vehiculos' ]
+      summary: Modifica el vehiculo identificado por `vehiculoMatricula`.
+      description:  |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+
+        | Status Code | Descripción         | Motivo                                        |
+        | ------------| --------------------| ----------------------------------------------|
+        | **209**     | CONTENT RETURNED    | La matricula del vehiculo existía y ha sido actualizado     |
+        | **404**     | NOT FOUND           | Si la matricula del vehiculo no existe                      |
+        | **412**     | PRECONDITION FAILED | Si el ETag proporcionado no está actualizado  |
+        | **422**     | UNPROCESSABLE ENTITY| Valor no permitido en alguno de los attributos|
+      operationId: vehiculo_matricula_put
+      parameters:
+        # https://www.rfc-editor.org/rfc/rfc7232.html#page-13
+        - $ref: '#/components/parameters/ifMatchParam'
+      requestBody:
+        $ref: '#/components/requestBodies/vehiculoUpdate'
+      responses:
+        '209':
+          description: '`CONTENT RETURNED`: la matricula del vehiculo ha sido actualizada'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehiculo'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '412':
+          $ref: '#/components/responses/Response_412'
+        '422':
+          $ref: '#/components/responses/Response_422'
+
+    options:
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: vehiculos_options
+      tags: [ '🚗Vehiculos' ]
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+
+  
+  /vehiculos/{marca}:
     parameters:
       - $ref: '#/components/parameters/vehiculoMarca'
     get:
@@ -312,7 +402,7 @@ components:
         application/json:
           schema:
             type: object
-            required: [ id, marca ]
+            required: [ id, matricula, marca, estado ]
             properties:
               id:
                 $ref: '#/components/schemas/Id_Vehiculo'
@@ -325,7 +415,7 @@ components:
                 $ref: '#/components/schemas/Marca_Vehiculo'
               estado:
                 $ref: '#/components/schemas/Estados_Vehiculos'
-          example: { "id": 111, "matrícula": "0000-AAA", "marca": "opel", "estado": "en reparacion"}
+          example: { "id": "111", "matrícula": "0000-AAA", "marca": "opel", "estado": "en reparacion"}
 
   parameters:
     vehiculoId:
@@ -346,14 +436,16 @@ components:
     orderParam:
       name: order
       in: query
-      description: 'Criterio de ordenación: `id` | `marca` | `color`'
+      description: 'Criterio de ordenación: `id` | `matricula` | `marca` | `estado`'
       required: false
       allowEmptyValue: false
       schema:
         type: string
         enum:
           - id
+          - matricula
           - marca
+          - estado
     orderingParam:
       name: ordering
       in: query
@@ -374,6 +466,36 @@ components:
       schema:
         type: integer
         minimum: 1
+
+  schemas:
+    Vehiculos:
+      title: '🚗Plataforma de gestión de Vehiculos'
+      description: >
+        Plataforma que tiene vehículos que son propiedad de los clientes 
+        y que se reparan y/o revisan en el taller. 
+        Cada vehículo estará identificado de forma única por su VIN.<br>
+      type: object
+      properties:
+        plataforma:
+          type: object
+          required: [ id, matricula, marca, estado ]
+          properties:
+            id:
+              $ref: '#/components/schemas/Id_Vehiculos'
+            matricula:
+              $ref: '#/components/schemas/Matricula_Vehiculos'
+            marca:
+              $ref: '#/components/schemas/Marca_Vehiculos'
+            estado:
+              $ref: '#/components/schemas/Estados_Vehiculos'
+      example: { "vehiculo": {
+                     "id": "111",
+                     "matricula": "0000-AAA",
+                     "marca": "opel",
+                     "estado": "En reparacion",
+                  }
+                }
+
 
   responses:
     Response_400:
