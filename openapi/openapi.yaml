@@ -17,12 +17,8 @@ servers:
 tags:
   - name: '🚗Vehiculos'
     description: Gestion de vehiculos
-  - name: '👥 Clientes'
-    description: Gestion de clientes (propietarios de vehiculos)
-  - name: '🧰 Taller'
+  - name: '🧰Taller'
     description: Reparacion y revisión de vehículos en el taller
-  - name: '🔍Identificación'
-    description: Identificación de vehículos de forma única por su VIN
 
 paths:
   /vehiculos:
@@ -371,6 +367,88 @@ paths:
             Allow:
               $ref: '#/components/headers/Allow'
 
+  /taller/{id_reparacion}/{vehiculo_id}:
+    parameters:
+      - $ref: '#/components/parameters/vehiculoId'
+    post:
+      summary: Añade una nueva reserva de un vehiculo para repararlo
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción          | Motivo                                    |
+        | ------------| ---------------------| ------------------------------------------|
+        | **201**     | CREATED              | La reserva ha sido creada                 |
+        | **404**     | BAD REQUEST          | El identificador del vehiculo no existe   |
+        | **409**     | CONFLICT             | La plataforma no está Libre               |
+      tags: [ '🧰Taller',  '🚗Vehiculos']
+      operationId: reserva_reparacion_post
+      responses:
+        '201':
+          description: Nueva reserva creada
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservaReparacion'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '409':
+          $ref: '#/components/responses/Response_409'
+    options:
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: reserva_coptions
+      tags: [ '🧰Taller',  '🚗Vehiculos']
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+
+  /taller/{id_revision}/{vehiculo_id}:
+    parameters:
+      - $ref: '#/components/parameters/vehiculoId'
+    post:
+      summary: Añade una nueva reserva de un vehiculo para revisarlo
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción          | Motivo                                    |
+        | ------------| ---------------------| ------------------------------------------|
+        | **201**     | CREATED              | La reserva ha sido creada                 |
+        | **404**     | BAD REQUEST          | El identificador del vehiculo no existe   |
+        | **409**     | CONFLICT             | La plataforma no está Libre               |
+      tags: [ '🧰Taller',  '🚗Vehiculos']
+      operationId: reserva_revision_post
+      responses:
+        '201':
+          description: Nueva reserva creada
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reserva'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '409':
+          $ref: '#/components/responses/Response_409'
+    options:
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: reserva_coptions
+      tags: [ '🧰Taller',  '🚗Vehiculos']
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+
 components:
   headers:
     ETag:
@@ -481,7 +559,7 @@ components:
           required: [ id, matricula, marca, estado ]
           properties:
             id:
-              $ref: '#/components/schemas/Id_Vehiculos'
+              $ref: '#/components/schemas/Id_Vehiculo'
             matricula:
               $ref: '#/components/schemas/Matricula_Vehiculos'
             marca:
@@ -496,7 +574,77 @@ components:
                   }
                 }
 
+    ReservaReparacion:
+      title: '📋 Reserva para repatracion de vehiculo'
+      type: object
+      properties:
+        reserva:
+          type: object
+          required: [ id_vehiculo, matricula ]
+          properties:
+            id_vehiculo:
+              $ref: '#/components/schemas/Id_Vehiculo'
+            matricula_vehiculos:
+              description: Matrícula de los vehiculos
+              type: string
+              pattern: "^[0-9]{4}[A-Z]{3}$"
+              example: "0000AAA"
+      example: { "reserva revision": { "id_vehiculo":"1G1JC5444R7252367", "matricula_vehiculos":"0000AAA" } }
+     
+    ReservaRevision:
+      title: '📋 Reserva para revision de vehiculo'
+      type: object
+      properties:
+        reserva:
+          type: object
+          required: [ id_vehiculo, matricula, marca ]
+          properties:
+            id_vehiculo:
+              $ref: '#/components/schemas/Id_Vehiculo'
+            matricula_vehiculos:
+              description: Matrícula de los vehiculos
+              type: string
+              pattern: "^[0-9]{4}[A-Z]{3}$"
+              example: "0000AAA"
+      example: { "reserva revision": { "id_vehiculo":"1G1JC5444R7252367", "matricula_vehiculos":"0000AAA" } }
 
+    Id_Vehiculo:
+      title: Identificador único del vehículo (VIN)
+      type: string
+      pattern: "^[A-HJ-NPR-Z\\d]{17}$"
+      example: "1G1JC5444R7252367"
+      x-faker: random.alphaNumeric(17, true, /^[A-HJ-NPR-Z\\d]{17}$/)
+
+    Matricula_Vehiculos:
+      title: Identificador
+      type: string
+      pattern: "^[0-9]{4}[A-Z]{3}$"
+      example: "0000AAA"
+      x-faker: random.regex("[0-9]{4}[A-Z]{3}")
+
+    Marca_Vehiculos:
+      title: Marca del vehículo
+      type: string
+      pattern: '^(Seat|Honda|Hyundai|Kia|Mazda|Volvo|Toyota|Renault|Peugeot|Citroën|Opel|Volkswagen|Audi|BMW|Mercedes-Benz|Ford|Fiat)$'
+      x-faker:
+        function: random.arrayElement
+        arguments:
+          - ['Seat', 'Honda', 'Hyundai', 'Kia', 'Mazda', 'Volvo', 'Toyota', 'Renault', 'Peugeot', 'Citroën', 'Opel', 'Volkswagen', 'Audi', 'BMW', 'Mercedes-Benz', 'Ford', 'Fiat']
+
+    Estados_Vehiculos:
+      description: |
+        Estado de reserva de Vehiculos:
+        * `En reparación`: Vehiculo dañado en proceso de ser reparado
+        * `Reparado`: Vehiculo ya arreglado, disponible para ser recogido por el cliente
+        * `En revisión`: Vehiculo en proceso de ser revisado
+        * `Revisado`: Vehiculo ya revisado, disponible para ser recogido por el cliente
+         * `Inhabilitado`: Vehiculo inhabilitado para su uso
+      type: string
+      default: "Inhabilitada"
+      enum: [ "En reparación", "Reparado", "En revisión", "Revisado", "Inhabilitada" ]
+      # https://v6.fakerjs.dev/guide/
+      x-faker: helpers.arrayElement([ 'En reparación', 'Reparado', 'En revisión', 'Revisado', 'Inhabilitado' ])
+  
   responses:
     Response_400:
       description: '`BAD REQUEST` El identificador único ya existe.'
