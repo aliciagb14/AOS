@@ -25,3 +25,9 @@ parameters:
 
 # SWAGGER-UI
 docker run -d -p 8000:8080 --rm --name aos2023_ui -e SWAGGER_JSON=/aos/openapi.yaml -v C:\Users\Alicia\Documents\Uni\2022-2023\SEGUNDO_CUATRI\AOS\p1_subs2\openapi:/aos swaggerapi/swagger-ui
+
+# MOCK
+docker run --init --rm -it -p 80:4010 --name aos2023_mock -v C:\Users\Alicia\Documents\Uni\2022-2023\SEGUNDO_CUATRI\AOS\p1_subs2\openapi:/aos stoplight/prism:4 mock --cors -h 0.0.0.0 "/aos/openapi.yaml"
+
+
+y luego usar: curl -i -v -X GET http://localhost/vehiculos

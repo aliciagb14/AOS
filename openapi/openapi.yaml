@@ -169,7 +169,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Vehiculo'
+                $ref: '#/components/schemas/Vehiculos'
         '404':
           $ref: '#/components/responses/Response_404'
         '412':
@@ -258,7 +258,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Vehiculo'
+                $ref: '#/components/schemas/Vehiculos'
         '404':
           $ref: '#/components/responses/Response_404'
         '412':
@@ -347,7 +347,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Vehiculo'
+                $ref: '#/components/schemas/Vehiculos'
         '404':
           $ref: '#/components/responses/Response_404'
         '412':
@@ -432,7 +432,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Reserva'
+                $ref: '#/components/schemas/ReservaRevision'
         '404':
           $ref: '#/components/responses/Response_404'
         '409':
@@ -494,15 +494,44 @@ components:
               estado:
                 $ref: '#/components/schemas/Estados_Vehiculos'
           example: { "id": "111", "matrícula": "0000-AAA", "marca": "opel", "estado": "en reparacion"}
+    
+    vehiculoUpdate:
+      description: Nuevos atributos del vehiculo
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              matricula:
+                $ref: '#/components/schemas/Matricula_Vehiculo'
+              estado:
+                $ref: '#/components/schemas/Estados_Vehiculos'
+          example: { "matricula": "0010-ABC", "estado": "En reparacion" }
 
   parameters:
     vehiculoId:
       name: vehiculo_id
       in: path
-      description: Identificador único del Vehiculo
+      description: Identificador único del Vehiculo (VIN)
       required: true
       schema:
         $ref: '#/components/schemas/Id_Vehiculo'
+    
+    Matricula:
+      name: matricula_vehiculo
+      in: path
+      description: Matricula del vehiculo
+      schema:
+        $ref: '#/components/schemas/Matricula_Vehiculo'
+
+    vehiculoMarca:
+      name: marca_vehiculo
+      in: path
+      description: Marca del vehiculo
+      schema:
+        $ref: '#/components/schemas/Marca_Vehiculo'
+    
     ifMatchParam:
       name: If-Match
       in: header
