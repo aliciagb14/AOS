@@ -23,3 +23,4 @@ docker run --init --rm -it -p 80:4010 --name aos2023_mock -v C:\Users\Alicia\Doc
 
 
 y luego usar: curl -i -v -X GET http://localhost/vehiculos
+a

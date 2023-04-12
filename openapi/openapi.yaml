@@ -277,7 +277,7 @@ paths:
     options:
       summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
       description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
-      operationId: vehiculos_options
+      operationId: vehiculos_optionsMat
       tags: [ '🚗Vehiculos' ]
       responses:
         '204':
@@ -289,6 +289,7 @@ paths:
   /taller/{trabajo_id}/{vehiculo_id}:
     parameters:
       - $ref: '#/components/parameters/vehiculoId'
+      - $ref: '#/components/parameters/trabajoId'
     post:
       summary: Añade una nueva reserva de un vehiculo para repararlo
       description: |
@@ -377,8 +378,6 @@ components:
                 type: string
                 pattern: "^[0-9]{4}-[A-Z]{3}$"
                 example: "0000-AAA"
-              marca:
-                $ref: '#/components/schemas/Marca_Vehiculo'
               estado:
                 $ref: '#/components/schemas/Estados_Vehiculos'
           example: { "id": "111", "matrícula": "0000-AAA", "marca": "opel", "estado": "Recepcionado"}
@@ -404,21 +403,22 @@ components:
       schema:
         $ref: '#/components/schemas/Id_Vehiculo'
     
+    trabajoId:
+      name: trabajo_id
+      in: path
+      description: Identificador del trabajo a realizar
+      required: true
+      schema:
+        $ref: '#/components/schemas/Id_Trabajo'
+    
     Matricula:
-      name: matricula_vehiculo
+      name: matricula
       in: path
       description: Matricula del vehiculo
       required: true
       schema:
-        type: array
-        $ref: '#/components/schemas/Matricula_Vehiculo'
-
-    vehiculoMarca:
-      name: marca_vehiculo
-      in: path
-      description: Marca del vehiculo
-      schema:
-        $ref: '#/components/schemas/Marca_Vehiculo'
+        type: string
+        $ref: '#/components/schemas/Matricula'
     
     ifMatchParam:
       name: If-Match
@@ -483,9 +483,7 @@ components:
             id_cliente:
               $ref: '#/components/schemas/Id_Cliente'
             matricula:
-              $ref: '#/components/schemas/Matricula_Vehiculo'
-            marca:
-              $ref: '#/components/schemas/Marca_Vehiculo'
+              $ref: '#/components/schemas/Matricula'
             id_trabajo:
               $ref: '#/components/schemas/Id_Trabajo'
             estado:
@@ -495,7 +493,6 @@ components:
                      "id_cliente": "00000000X", 
                      "id_trabajo": "1000",
                      "matricula": "0000-AAA",
-                     "marca": "opel",
                      "estado": "Recepcionado",
                      "links": {
                         "parent": {
@@ -545,21 +542,13 @@ components:
       example: "1000"
       x-faker: random.alphaNumeric(17, true, /^[0-9]{4}$/)
 
-    Matricula_Vehiculo:
-      title: Matricula del vehiculo
+    Matricula:
       type: array
-      pattern: "^[0-9]{4}[A-Z]{3}$"
-      example: "0000-AAA"
-      x-faker: random.regex("[0-9]{4}[A-Z]{3}")
-
-    Marca_Vehiculo:
-      title: Marca del vehículo
-      type: string
-      pattern: '^(Seat|Honda|Hyundai|Kia|Mazda|Volvo|Toyota|Renault|Peugeot|Citroën|Opel|Volkswagen|Audi|BMW|Mercedes-Benz|Ford|Fiat)$'
-      x-faker:
-        function: random.arrayElement
-        arguments:
-          - ['Seat', 'Honda', 'Hyundai', 'Kia', 'Mazda', 'Volvo', 'Toyota', 'Renault', 'Peugeot', 'Citroën', 'Opel', 'Volkswagen', 'Audi', 'BMW', 'Mercedes-Benz', 'Ford', 'Fiat']
+      items:
+        type: string
+        pattern: "^[0-9]{4}[A-Z]{3}$"
+        example: "0000-AAA"
+        x-faker: random.regex("[0-9]{4}[A-Z]{3}")
 
     Estados_Vehiculos:
       description: |
