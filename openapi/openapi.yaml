@@ -53,6 +53,15 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Vehiculos'
+                  links:
+                    description: Enlaces de paginación
+                    readOnly: true
+                    type: object
+                    properties:
+                      prevPage:
+                        $ref: '#/components/schemas/Link'
+                      nextPage:
+                        $ref: '#/components/schemas/Link'
               examples:
                 vehiculos-example:
                   $ref: '#/components/examples/vehiculos-example'
@@ -71,7 +80,7 @@ paths:
         | **422**     | UNPROCESSABLE ENTITY | Falta alguno de los atributos obligatorios|
         |             |                      | o el valor no está permitido              |
       tags: [ '🚗Vehiculos' ]
-      operationId: vehiculos_post
+      operationId: vehiculo_post
       requestBody:
         $ref: '#/components/requestBodies/vehiculosRB'
       responses:
@@ -113,7 +122,7 @@ paths:
         | ------------| ------------| -----------------------------------|
         | **200**     | OK          | Si el vehiculo existe            |
         | **404**     | NOT FOUND   | Si no existe el vehiculo         |
-      operationId: vehiculos_get
+      operationId: vehiculo_get
       tags: [ '🚗Vehiculos' ]
       responses:
         '200':
@@ -189,7 +198,6 @@ paths:
             Allow:
               $ref: '#/components/headers/Allow'
   
-
   /vehiculos/{matricula}:
     parameters:
       - $ref: '#/components/parameters/Matricula'
@@ -278,96 +286,7 @@ paths:
             Allow:
               $ref: '#/components/headers/Allow'
 
-  
-  /vehiculos/{marca}:
-    parameters:
-      - $ref: '#/components/parameters/vehiculoMarca'
-    get:
-      summary: Obtiene un vehiculo identificado por `vehiculoMarca`
-      description: |
-        La siguiente tabla define los códigos de estado que puede devolver este endpoint
-        
-        | Status Code | Descripción | Motivo                             |
-        | ------------| ------------| -----------------------------------|
-        | **200**     | OK          | Si la marca existe            |
-        | **404**     | NOT FOUND   | Si no existe la marca         |
-      operationId: vehiculos_marca_get
-      tags: [ '🚗Vehiculos' ]
-      responses:
-        '200':
-          description: Vehiculo
-          headers:
-            ETag:
-              $ref: '#/components/headers/ETag'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Vehiculos'
-        '404':
-          $ref: '#/components/responses/Response_404'
-
-    delete:
-      summary: Elimina el vehiculo identificado por `vehiculoMarca`
-      description: |
-        La siguiente tabla define los códigos de estado que puede devolver este endpoint
-        
-        | Status Code      | Descripción | Motivo                                            |
-        | ---------------- | ------------| ------------------------------------------        |
-        | **204**          | NO CONTENT  | La marca del vehiculo existía y ha sido eliminada |
-        | **404**          | NOT FOUND   | Si la marca del vehiculo no existe                |
-      operationId: vehiculo_marca_delete
-      tags: [ '🚗Vehiculos' ]
-      responses:
-        '204':
-          description: Vehiculo eliminada &lt;Cuerpo de la respuesta vacío&gt;
-        '404':
-          $ref: '#/components/responses/Response_404'
-
-    put:
-      tags: [ '🚗Vehiculos' ]
-      summary: Modifica el vehiculo identificado por `vehiculoMarca`.
-      description:  |
-        La siguiente tabla define los códigos de estado que puede devolver este endpoint
-
-        | Status Code | Descripción         | Motivo                                        |
-        | ------------| --------------------| ----------------------------------------------|
-        | **209**     | CONTENT RETURNED    | La marca del vehiculo existía y ha sido actualizado     |
-        | **404**     | NOT FOUND           | Si la marca del vehiculo no existe                      |
-        | **412**     | PRECONDITION FAILED | Si el ETag proporcionado no está actualizado  |
-        | **422**     | UNPROCESSABLE ENTITY| Valor no permitido en alguno de los attributos|
-      operationId: vehiculo_marca_put
-      parameters:
-        # https://www.rfc-editor.org/rfc/rfc7232.html#page-13
-        - $ref: '#/components/parameters/ifMatchParam'
-      requestBody:
-        $ref: '#/components/requestBodies/vehiculoUpdate'
-      responses:
-        '209':
-          description: '`CONTENT RETURNED`: el vehiculo ha sido actualizado'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Vehiculos'
-        '404':
-          $ref: '#/components/responses/Response_404'
-        '412':
-          $ref: '#/components/responses/Response_412'
-        '422':
-          $ref: '#/components/responses/Response_422'
-
-    options:
-      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
-      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
-      operationId: vehiculos_options
-      tags: [ '🚗Vehiculos' ]
-      responses:
-        '204':
-          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
-          headers:
-            Allow:
-              $ref: '#/components/headers/Allow'
-
-  /taller/{id_reparacion}/{vehiculo_id}:
+  /taller/{trabajo_id}/{vehiculo_id}:
     parameters:
       - $ref: '#/components/parameters/vehiculoId'
     post:
@@ -379,9 +298,9 @@ paths:
         | ------------| ---------------------| ------------------------------------------|
         | **201**     | CREATED              | La reserva ha sido creada                 |
         | **404**     | BAD REQUEST          | El identificador del vehiculo no existe   |
-        | **409**     | CONFLICT             | La plataforma no está Libre               |
+        | **409**     | CONFLICT             | El vehiculo no está disponible            |
       tags: [ '🧰Taller',  '🚗Vehiculos']
-      operationId: reserva_reparacion_post
+      operationId: reserva_trabajo_post
       responses:
         '201':
           description: Nueva reserva creada
@@ -391,52 +310,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReservaReparacion'
+                $ref: '#/components/schemas/ReservaTrabajo'
         '404':
           $ref: '#/components/responses/Response_404'
         '409':
           $ref: '#/components/responses/Response_409'
-    options:
-      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
-      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
-      operationId: reserva_coptions
-      tags: [ '🧰Taller',  '🚗Vehiculos']
-      responses:
-        '204':
-          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
-          headers:
-            Allow:
-              $ref: '#/components/headers/Allow'
 
-  /taller/{id_revision}/{vehiculo_id}:
-    parameters:
-      - $ref: '#/components/parameters/vehiculoId'
-    post:
-      summary: Añade una nueva reserva de un vehiculo para revisarlo
-      description: |
-        La siguiente tabla define los códigos de estado que puede devolver este endpoint
-        
-        | Status Code | Descripción          | Motivo                                    |
-        | ------------| ---------------------| ------------------------------------------|
-        | **201**     | CREATED              | La reserva ha sido creada                 |
-        | **404**     | BAD REQUEST          | El identificador del vehiculo no existe   |
-        | **409**     | CONFLICT             | La plataforma no está Libre               |
-      tags: [ '🧰Taller',  '🚗Vehiculos']
-      operationId: reserva_revision_post
-      responses:
-        '201':
-          description: Nueva reserva creada
-          headers:
-            Location:
-              $ref: '#/components/headers/Location'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReservaRevision'
-        '404':
-          $ref: '#/components/responses/Response_404'
-        '409':
-          $ref: '#/components/responses/Response_409'
     options:
       summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
       description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
@@ -458,11 +337,13 @@ components:
         pattern: "[0-9a-f]*"
         example:
           33a64df551425fcc
+
     Allow:
       description: Lista de métodos HTTP soportados
       schema:
         type: string
       example: GET, DELETE, PUT, OPTIONS
+
     Location:
       description: '`URI` del nuevo recurso'
       schema:
@@ -484,6 +365,13 @@ components:
             properties:
               id:
                 $ref: '#/components/schemas/Id_Vehiculo'
+              propietario_id:
+                description: Dni propietario
+                type: string
+                pattern: "^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]$"
+                example: "00000000X"
+              trabajo_id:
+                $ref: '#/components/schemas/Id_Trabajo'
               matrícula:
                 description: Matrícula del coche
                 type: string
@@ -493,7 +381,7 @@ components:
                 $ref: '#/components/schemas/Marca_Vehiculo'
               estado:
                 $ref: '#/components/schemas/Estados_Vehiculos'
-          example: { "id": "111", "matrícula": "0000-AAA", "marca": "opel", "estado": "en reparacion"}
+          example: { "id": "111", "matrícula": "0000-AAA", "marca": "opel", "estado": "Recepcionado"}
     
     vehiculoUpdate:
       description: Nuevos atributos del vehiculo
@@ -503,11 +391,9 @@ components:
           schema:
             type: object
             properties:
-              matricula:
-                $ref: '#/components/schemas/Matricula_Vehiculo'
               estado:
                 $ref: '#/components/schemas/Estados_Vehiculos'
-          example: { "matricula": "0010-ABC", "estado": "En reparacion" }
+          example: { "estado": "En reparacion" }
 
   parameters:
     vehiculoId:
@@ -522,7 +408,9 @@ components:
       name: matricula_vehiculo
       in: path
       description: Matricula del vehiculo
+      required: true
       schema:
+        type: array
         $ref: '#/components/schemas/Matricula_Vehiculo'
 
     vehiculoMarca:
@@ -540,6 +428,7 @@ components:
       schema:
         type: string
         pattern: "[0-9a-f]*"
+
     orderParam:
       name: order
       in: query
@@ -553,6 +442,7 @@ components:
           - matricula
           - marca
           - estado
+
     orderingParam:
       name: ordering
       in: query
@@ -564,6 +454,7 @@ components:
         enum:
           - ASC
           - DESC
+
     pageParam:
       name: page
       in: query
@@ -585,57 +476,53 @@ components:
       properties:
         plataforma:
           type: object
-          required: [ id, matricula, marca, estado ]
+          required: [ id, id_cliente, matricula, id_trabajo, estado ]
           properties:
             id:
               $ref: '#/components/schemas/Id_Vehiculo'
+            id_cliente:
+              $ref: '#/components/schemas/Id_Cliente'
             matricula:
               $ref: '#/components/schemas/Matricula_Vehiculo'
             marca:
               $ref: '#/components/schemas/Marca_Vehiculo'
+            id_trabajo:
+              $ref: '#/components/schemas/Id_Trabajo'
             estado:
               $ref: '#/components/schemas/Estados_Vehiculos'
       example: { "vehiculo": {
-                     "id": "111",
+                     "id": "5G1DC5000R7252367",
+                     "id_cliente": "00000000X", 
+                     "id_trabajo": "1000",
                      "matricula": "0000-AAA",
                      "marca": "opel",
-                     "estado": "En reparacion",
+                     "estado": "Recepcionado",
+                     "links": {
+                        "parent": {
+                            "href": "http://127.0.0.1:80/api/v1/vehiculos",
+                            "rel":"vehiculo_post vehiculo_cget"
+                        },
+                        "self": {
+                            "href": "http://127.0.0.1:80/api/v1/vehiculos/5G1DC5000R7252367",
+                            "rel":"vehiculo_post vehiculo_delete vehiculo_put"
+                        }
+                     }
                   }
                 }
 
-    ReservaReparacion:
-      title: '📋 Reserva para repatracion de vehiculo'
+    ReservaTrabajo:
+      title: '📋 Reserva para reparacion/revision de vehiculo'
       type: object
       properties:
         reserva:
           type: object
-          required: [ id_vehiculo, matricula ]
+          required: [ id_vehiculo, id_trabajo, estado]
           properties:
             id_vehiculo:
               $ref: '#/components/schemas/Id_Vehiculo'
-            matricula_vehiculos:
-              description: Matrícula de los vehiculos
-              type: string
-              pattern: "^[0-9]{4}[A-Z]{3}$"
-              example: "0000AAA"
-      example: { "reserva revision": { "id_vehiculo":"1G1JC5444R7252367", "matricula_vehiculos":"0000AAA" } }
-     
-    ReservaRevision:
-      title: '📋 Reserva para revision de vehiculo'
-      type: object
-      properties:
-        reserva:
-          type: object
-          required: [ id_vehiculo, matricula, marca ]
-          properties:
-            id_vehiculo:
-              $ref: '#/components/schemas/Id_Vehiculo'
-            matricula_vehiculos:
-              description: Matrícula de los vehiculos
-              type: string
-              pattern: "^[0-9]{4}[A-Z]{3}$"
-              example: "0000AAA"
-      example: { "reserva revision": { "id_vehiculo":"1G1JC5444R7252367", "matricula_vehiculos":"0000AAA" } }
+            id_trabajo:
+              $ref: '#/components/schemas/Id_Trabajo'
+      example: { "reserva trabajo": { "id_vehiculo":"1G1JC5444R7252367", "id_trabajo":"1000" } }
 
     Id_Vehiculo:
       title: Identificador único del vehículo (VIN)
@@ -644,11 +531,25 @@ components:
       example: "1G1JC5444R7252367"
       x-faker: random.alphaNumeric(17, true, /^[A-HJ-NPR-Z\\d]{17}$/)
 
+    Id_Cliente:
+      title: Dni propietario
+      type: string
+      pattern: "^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]$"
+      example: "00000000X"
+      x-faker: random.alphaNumeric(17, true, /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]$/)
+
+    Id_Trabajo:
+      title: Identificador del trabajo que se va realizar en taller
+      type: string
+      pattern: "^[0-9]{4}$"
+      example: "1000"
+      x-faker: random.alphaNumeric(17, true, /^[0-9]{4}$/)
+
     Matricula_Vehiculo:
       title: Matricula del vehiculo
-      type: string
+      type: array
       pattern: "^[0-9]{4}[A-Z]{3}$"
-      example: "0000AAA"
+      example: "0000-AAA"
       x-faker: random.regex("[0-9]{4}[A-Z]{3}")
 
     Marca_Vehiculo:
@@ -667,13 +568,32 @@ components:
         * `Reparado`: Vehiculo ya arreglado, disponible para ser recogido por el cliente
         * `En revisión`: Vehiculo en proceso de ser revisado
         * `Revisado`: Vehiculo ya revisado, disponible para ser recogido por el cliente
-         * `Inhabilitado`: Vehiculo inhabilitado para su uso
+         * `Recepcionado`: Vehiculo no recepcionado
       type: string
-      default: "Inhabilitada"
-      enum: [ "En reparación", "Reparado", "En revisión", "Revisado", "Inhabilitada" ]
+      default: "Recepcionado"
+      enum: [ "En reparación", "Reparado", "En revisión", "Revisado", "Recepcionado" ]
       # https://v6.fakerjs.dev/guide/
       x-faker: helpers.arrayElement([ 'En reparación', 'Reparado', 'En revisión', 'Revisado', 'Inhabilitado' ])
-  
+
+    Link:
+      description: Enlace de relación
+      title: '🔗 Link'
+      type: object
+      properties:
+        href:
+          description: URL del enlace
+          type: string
+          format: uri
+          x-faker: internet.url
+        rel:
+          description: "Relación del recurso enlazado con el actual. Contiene una lista de tipos
+                    de relaciones separados por espacio."
+          type: string
+          x-faker: lorem.words
+      example:
+        href: https://www.example.com/path/resource
+        rel: relAction1 relAction2
+
     HTTP_Problem:
       type: object
       externalDocs:
@@ -712,6 +632,7 @@ components:
           examples:
             response-http-400:
               $ref: '#/components/examples/response-http-400'
+
     Response_404:
       description: '`NOT FOUND`: recurso no disponible'
       content:
@@ -753,10 +674,18 @@ components:
     vehiculos-example:
       value:
         vehiculos:
-          - { "vehiculo" : {"id": "1G1JC5444R7252386", "matricula":"0001-ABB", "marca": "honda", "estado":"reparado" }
+          - { "vehiculo" : {"id": "1G1JC5444R7252386", "matricula":"0001-ABB", "marca": "honda", "estado":"reparado",
+              "links": {
+                  "parent": { "href": "http://127.0.0.1:80/api/v1/vehiculos", "rel": "vehiculo_post vehiculo_cget"},
+                  "self": { "href": "http://127.0.0.1:80/api/v1/vehiculos/1G1JC5444R7252386", "rel": "vehiculo_get vehiculo_put" }
+               } }
             }
 
-          - { "vehiculo" : {"id": "2A1JC5444R7252386", "matricula":"1001-ABB", "marca": "volvo", "estado":"en revision" }
+          - { "vehiculo" : {"id": "2A1JC5444R7252386", "matricula":"1001-ABB", "marca": "volvo", "estado":"en revision",
+              "links": {
+                  "parent": { "href": "http://127.0.0.1:80/api/v1/vehiculos", "rel": "vehiculo_post vehiculo_cget"},
+                  "self": { "href": "http://127.0.0.1:80/api/v1/vehiculos/2A1JC5444R7252386", "rel": "vehiculo_get vehiculo_put" }
+               } }
             }
     response-http-400:
       value:

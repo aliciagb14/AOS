@@ -1,12 +1,4 @@
-components:
-  schemas:
-    Plataforma:
-      type: object
-      properties:
-        nombre:
-          type: string
-        version:
-          type: string
+Subsistema_2: Gestión de los vehículos que son propiedad de los clientes y que se reparan y/o revisan en el taller. Cada vehículo estará identificado de forma única por su VIN.
 
 #get: sirven para consultar o solicitar info
   #post: ingresar o enviar registros (al rellenar datos)
@@ -27,7 +19,7 @@ parameters:
 docker run -d -p 8000:8080 --rm --name aos2023_ui -e SWAGGER_JSON=/aos/openapi.yaml -v C:\Users\Alicia\Documents\Uni\2022-2023\SEGUNDO_CUATRI\AOS\p1_subs2\openapi:/aos swaggerapi/swagger-ui
 
 # MOCK
-docker run --init --rm -it -p 80:4010 --name aos2023_mock -v C:\Users\Alicia\Documents\Uni\2022-2023\SEGUNDO_CUATRI\AOS\p1_subs2\openapi:/aos stoplight/prism:4 mock --cors -h 0.0.0.0 "/aos/openapi.yaml"
+docker run --init --rm -it -p 80:4010 --name aos2023_mock -v C:\Users\Alicia\Documents\Uni\2022-2023\SEGUNDO_CUATRI\AOS\p1_subs2\openapi:/aos  stoplight/prism:4 mock --cors -h 0.0.0.0 "/aos/openapi.yaml"
 
 
 y luego usar: curl -i -v -X GET http://localhost/vehiculos
