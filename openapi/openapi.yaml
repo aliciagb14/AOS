@@ -663,14 +663,14 @@ components:
     vehiculos-example:
       value:
         vehiculos:
-          - { "vehiculo" : {"id": "1G1JC5444R7252386", "matricula":"0001-ABB", "marca": "honda", "estado":"reparado",
+          - { "vehiculo" : {"id": "1G1JC5444R7252386", "id_cliente":"00000000X", "id_trabajo":"1000", "matricula":"0001-ABB", "estado":"reparado",
               "links": {
                   "parent": { "href": "http://127.0.0.1:80/api/v1/vehiculos", "rel": "vehiculo_post vehiculo_cget"},
                   "self": { "href": "http://127.0.0.1:80/api/v1/vehiculos/1G1JC5444R7252386", "rel": "vehiculo_get vehiculo_put" }
                } }
             }
 
-          - { "vehiculo" : {"id": "2A1JC5444R7252386", "matricula":"1001-ABB", "marca": "volvo", "estado":"en revision",
+          - { "vehiculo" : {"id": "2A1JC5444R7252386", "id_cliente":"00000000A", "id_trabajo":"1001", "matricula":"1001-ABB", "estado":"en revision",
               "links": {
                   "parent": { "href": "http://127.0.0.1:80/api/v1/vehiculos", "rel": "vehiculo_post vehiculo_cget"},
                   "self": { "href": "http://127.0.0.1:80/api/v1/vehiculos/2A1JC5444R7252386", "rel": "vehiculo_get vehiculo_put" }

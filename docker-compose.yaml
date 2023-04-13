@@ -19,14 +19,3 @@ services:
             SWAGGER_JSON: /aos/openapi.yaml
         volumes:
             - ./openapi:/aos:ro
-
-    proxy:
-        image: caddy:latest
-        container_name: p1_proxy
-        volumes:
-            - ./Caddyfile:/etc/caddy/Caddyfile
-            - ./caddy_data:/data
-        ports:
-            - "80:80"
-        depends_on:
-            - mock_backend
