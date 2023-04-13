@@ -1,24 +1,23 @@
-Subsistema_2: Gestión de los vehículos que son propiedad de los clientes y que se reparan y/o revisan en el taller. Cada vehículo estará identificado de forma única por su VIN.
+Objetivo:
+----------
+El principal objetivo de esta tarea consiste en consolidar los conceptos relacionados con el diseño y la especificación de un servicio. Para ello se definirá y publicará la definición de un servicio empleando el estándar OpenAPI 3. Adicionalmente se simulará el comportamiento del servicio (se propone el empleo de Swagger-UI, Stoplight Prism, Postman, ...)
 
-#get: sirven para consultar o solicitar información
-#post: ingresar o enviar registros (al rellenar datos)
-#put: actualizar un registro (valida respecto a id y actualiza)
-#delete: (borra segun el id de un registro)
-#options: proporciona la lista de los métodos HTTP soportados por el      endpoint especificado
+Enunciado:
+----------
+Sistema de Gestión de talleres de mecánica rápida
+Una conocida empresa que posee talleres de mecánica rápida por toda la geografía nacional nos ha encargado la realización de un sistema de gestión para una parte de su negocio. A efectos de funcionalidad, cada uno de los talleres se gestiona de forma independiente, por lo que cada uno de ellos tendrá su propio despliegue de la aplicación. 
+El subsistema a desarrollar es:
 
-parameters:
-  - $ref: '#/components/parameters/pageParam'->si hay 100 datos y queremos obtener del 10 al 19 se envia el valor 2
-  - $ref: '#/components/parameters/orderParam'->el campo por el cual queremos ordenar los resultados (ejem: matricula)
-    - $ref: '#/components/parameters/orderingParam'->el orden por el que queremos ordenar (ascendente o descendente)
+* Subsistema_2: Gestión de los vehículos
+    - Son propiedad de los clientes
+    - Se reparan y/o revisan en el taller.
+    - Cada vehículo estará identificado de forma única por su VIN.
+ 
+Notas:
+------
+1. El diseño de nuestro microservicio se ha realizado con un nivel de madurez (RMM) de nivel 3: HATEOAS.
 
+2. Se permite el lanzamiento de contenedores mediante el comando: docker-compose up. Se crearán dos contenedores. Uno el del swagger que nos permitirá ver la especificación de nuestra API y el del mock que nos permitirá ver si los accesos a los distintos endpoints se realizan correctamente. 
 
-# SWAGGER-UI
-docker run -d -p 8000:8080 --rm --name aos2023_ui -e SWAGGER_JSON=/aos/openapi.yaml -v C:\Users\Alicia\Documents\Uni\2022-2023\SEGUNDO_CUATRI\AOS\p1_subs2\openapi:/aos swaggerapi/swagger-ui
-
-# MOCK
-docker run --init --rm -it -p 80:4010 --name aos2023_mock -v C:\Users\Alicia\Documents\Uni\2022-2023\SEGUNDO_CUATRI\AOS\p1_subs2\openapi:/aos stoplight/prism:4 mock --cors -h 0.0.0.0 "/aos/openapi.yaml"
-
-
-y luego usar: curl -i -v -X GET http://localhost/vehiculos
-
+3. La especificación de nuestra API se adhiere a los principios REST
 
