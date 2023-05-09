@@ -611,6 +611,24 @@ components:
             A URI reference that identifies the specific occurrence of the problem.
             It may or may not yield further information if dereferenced.
 
+    AllVehiculos:
+      type: object
+      properties:
+        Vehiculos:
+          $ref: '#/components/schemas/Vehiculos'
+        ReservaTrabajo:
+          $ref: '#/components/schemas/ReservaTrabajo'
+        Id_Vehiculo:
+          $ref: '#/components/schemas/Id_Vehiculo'
+        Matricula:
+          $ref: '#/components/schemas/Matricula'
+        Estados_Vehiculos:
+          $ref: '#/components/schemas/Estados_Vehiculos'
+        HTTP_Problem:
+          $ref: '#/components/schemas/HTTP_Problem'
+        Link:
+          $ref: '#/components/schemas/Link'
+
   responses:
     Response_400:
       description: '`BAD REQUEST` El identificador único ya existe.'

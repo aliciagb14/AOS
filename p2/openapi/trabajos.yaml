@@ -717,7 +717,44 @@ components:
       example:
         href: http://127.0.0.1:8000/contenido/0991
         description: 'Ir al contenido 0991'
-        title: 'Contenido 0991'  
+        title: 'Contenido 0991'
+
+    AllTrabajos:
+      type: object
+      properties:
+        TipoTrabajo:
+          $ref: '#/components/schemas/TipoTrabajo'
+        TrabajoDiario:
+          $ref: '#/components/schemas/TrabajoDiario'
+        IdTrabajoDiario:
+          $ref: '#/components/schemas/IdTrabajoDiario'
+        IdTipoTrabajo:
+          $ref: '#/components/schemas/IdTipoTrabajo'
+        NombreTrabajo:
+          $ref: '#/components/schemas/NombreTrabajo'
+        DescripcionTrabajo:
+          $ref: '#/components/schemas/DescripcionTrabajo'
+        MotivoTrabajo:
+          $ref: '#/components/schemas/MotivoTrabajo'
+        FechaInicio:
+          $ref: '#/components/schemas/FechaInicio'
+        HorasDedicadas:
+          $ref: '#/components/schemas/HorasDedicadas'
+        IdRecurso:
+          $ref: '#/components/schemas/IdRecurso'
+        FechaFin:
+          $ref: '#/components/schemas/FechaFin'
+        RecursosNecesarios:
+          $ref: '#/components/schemas/RecursosNecesarios'
+        EstadoTrabajo:
+          $ref: '#/components/schemas/EstadoTrabajo'
+        VINCoche:
+          $ref: '#/components/schemas/VINCoche'
+        HTTP_Problem:
+          $ref: '#/components/schemas/HTTP_Problem'
+        Link:
+          $ref: '#/components/schemas/Link'
+
   headers:
     ETag:
       description: "Entity Tag (identificador único proporcionado para validación de caché)"

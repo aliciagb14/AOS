@@ -45,40 +45,10 @@ paths:
 
 components:
   schemas:
-    Cliente:
-      $ref: 'schemas.yaml#/Cliente'
-    Id_Cliente:
-      $ref: 'schemas.yaml#/Id_Cliente'
-    DNI_Cliente:
-      $ref: 'schemas.yaml#/DNI_Cliente'
-    Nombre_Cliente:
-      $ref: 'schemas.yaml#/Nombre_Cliente'
-    Apellidos_Cliente:
-      $ref: 'schemas.yaml#/Apellidos_Cliente'
-    Direccion_Cliente:
-      $ref: 'schemas.yaml#/Direccion_Cliente'
-    CuentaBancaria_Cliente:
-      $ref: 'schemas.yaml#/CuentaBancaria_Cliente'
-    Telefono: 
-      $ref: 'schemas.yaml#/Telefono'
-    Mail: 
-      $ref: 'schemas.yaml#/Mail'
-    HTTP_Problem:
-      $ref: 'schemas.yaml#/HTTP_Problem'
-    Link:
-      $ref: 'schemas.yaml#/Link'
-    Vehiculos:
-      $ref: 'vehiculos.yaml#/components/schemas/Vehiculos'
-    ReservaTrabajo:
-      $ref: 'vehiculos.yaml#/components/schemas/ReservaTrabajo'
-    Id_Vehiculo:
-      $ref: 'vehiculos.yaml#/components/schemas/Id_Vehiculo'
-    Matricula:
-      $ref: 'vehiculos.yaml#/components/schemas/Matricula'
-    Estados_Vehiculos:
-       $ref: 'vehiculos.yaml#/components/schemas/Estados_Vehiculos'
-    Link:
-      $ref: 'vehiculos.yaml#/components/schemas/Link'
-    TipoTrabajo:
-      $ref: 'trabajos.yaml#/components/schemas/TipoTrabajo'
+    AllClientes:
+      $ref: 'clientes.yaml#/components/schemas/AllClientes'
+    AllVehiculos:
+      $ref: 'vehiculos.yaml#/components/schemas/AllVehiculos'
+    AllTrabajos:
+      $ref: 'trabajos.yaml#/components/schemas/AllTrabajos'
   
