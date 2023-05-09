@@ -1,0 +1,7 @@
+cliente:
+  # Se incluye el microservicio de clientes
+  $ref: 'clientes.yaml'
+
+vehiculos:
+  # Se incluye el microservicio de vehículos
+  $ref: 'vehiculos.yaml'

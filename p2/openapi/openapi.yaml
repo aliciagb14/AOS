@@ -1,0 +1,84 @@
+openapi: 3.0.3
+
+info:
+  version: 1.0.0
+  title: 🛠️ Gestión de Microservicios de Taller 🛠️
+  description: >
+    API Rest para la gestión de microservicios de un taller de mecánica
+  contact:
+    name: Grupo 4
+
+servers:
+  - url: http://127.0.0.1:80/api/v1
+
+tags:
+  - name: 'Cliente'
+    description: Cliente
+
+paths:
+  /cliente:
+    $ref: 'clientes.yaml'
+  /clientes/{cliente_id}:
+    $ref: 'clientes-by-id.yaml'
+  /vehiculos:
+    $ref: 'vehiculos.yaml#/paths/~1vehiculos'
+  /vehiculos/{vehiculo_id}:
+    $ref: 'vehiculos.yaml#/paths/~1vehiculos~1{vehiculo_id}'
+  /vehiculos/{matricula}:
+    $ref: 'vehiculos.yaml#/paths/~1vehiculos~1{matricula}'
+  /taller/{trabajo_id}/{vehiculo_id}:
+    $ref: 'vehiculos.yaml#/paths/~1taller~1{trabajo_id}~1{vehiculo_id}'
+  /tipos-trabajo:
+    $ref: 'trabajos.yaml#/paths/~1tipos-trabajo'
+  /tipos-trabajo/{IdTipoActividad}:
+    $ref: 'trabajos.yaml#/paths/~1tipos-trabajo~1{IdTipoActividad}'
+  /TrabajoDiario:
+    $ref: 'trabajos.yaml#/paths/~1TrabajoDiario'
+  /TrabajosSegunCoche/{CarVIN}:
+    $ref: 'trabajos.yaml#/paths/~1TrabajosSegunCoche~1{CarVIN}'
+  /TrabajoDiario/{IdTrabajoDiario}:
+    $ref: 'trabajos.yaml#/paths/~1TrabajoDiario~1{IdTrabajoDiario}'
+  /TrabajoDiarioEstados/{EstadoTrabajo}:
+    $ref: 'trabajos.yaml#/paths/~1TrabajoDiarioEstados~1{EstadoTrabajo}'
+  /TrabajoDiarioRecursos/{IdRecurso}:
+    $ref: 'trabajos.yaml#/paths/~1TrabajoDiarioRecursos~1{IdRecurso}'
+
+components:
+  schemas:
+    Cliente:
+      $ref: 'schemas.yaml#/Cliente'
+    Id_Cliente:
+      $ref: 'schemas.yaml#/Id_Cliente'
+    DNI_Cliente:
+      $ref: 'schemas.yaml#/DNI_Cliente'
+    Nombre_Cliente:
+      $ref: 'schemas.yaml#/Nombre_Cliente'
+    Apellidos_Cliente:
+      $ref: 'schemas.yaml#/Apellidos_Cliente'
+    Direccion_Cliente:
+      $ref: 'schemas.yaml#/Direccion_Cliente'
+    CuentaBancaria_Cliente:
+      $ref: 'schemas.yaml#/CuentaBancaria_Cliente'
+    Telefono: 
+      $ref: 'schemas.yaml#/Telefono'
+    Mail: 
+      $ref: 'schemas.yaml#/Mail'
+    HTTP_Problem:
+      $ref: 'schemas.yaml#/HTTP_Problem'
+    Link:
+      $ref: 'schemas.yaml#/Link'
+    Vehiculos:
+      $ref: 'vehiculos.yaml#/components/schemas/Vehiculos'
+    ReservaTrabajo:
+      $ref: 'vehiculos.yaml#/components/schemas/ReservaTrabajo'
+    Id_Vehiculo:
+      $ref: 'vehiculos.yaml#/components/schemas/Id_Vehiculo'
+    Matricula:
+      $ref: 'vehiculos.yaml#/components/schemas/Matricula'
+    Estados_Vehiculos:
+       $ref: 'vehiculos.yaml#/components/schemas/Estados_Vehiculos'
+    Link:
+      $ref: 'vehiculos.yaml#/components/schemas/Link'
+    TipoTrabajo:
+      $ref: 'trabajos.yaml#/components/schemas/TipoTrabajo'
+  

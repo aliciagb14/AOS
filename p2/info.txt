@@ -1,0 +1,80 @@
+El principal objetivo de esta tarea consiste en consolidar los conceptos relacionados con la infraestructura 
+y el despliegue de una aplicación que sigue una arquitectura orientada a servicios. 
+La aplicación en cuestión es el gestor de talleres de mecánica rápida sobre el que se ha trabajado en la primera práctica, 
+en la cual cada grupo especificó una API para uno de los servicios de los que consta dicha aplicación. 
+Para ello se estudiará y planificará la infraestructura necesaria para la integración de todos esos servicios, 
+teniendo en cuenta que se plantean dos enfoques: un despliegue y puesta en marcha en un host con Docker Compose 
+y un despliegue y puesta en marcha en un clúster Kubernetes.
+
+Enunciado:
+La consecución de este objetivo se planifica en las siguientes fases:
+
+    1) Publicación en un repositorio de código (Github, Gitlab, etc.) de la especificación de la API realizada (y corregida) en la p1. 
+    Además, habrá que proporcionar un fichero Dockerfile para construir una imagen de contenedor para desplegar el servicio 
+    así como las dependencias del mismo (persistencia, librerías, etc.). 
+
+    2) Publicación de la imagen de contenedor del servicio en Docker Hub. 
+    Esto es necesario para la posterior integración del servicio en el despliegue de Kubernetes.
+
+    3) Breve memoria descriptiva con esquema de despliegue de todos los servicios, comunicaciones entre ellos,
+     contenedores necesarios para cada uno de ellos y la justificación de todas las decisiones tomadas.
+
+    4) Ficheros necesarios para realizar el despliegue de todos los servicios de la aplicación con Docker Compose.
+    (NOTA: Para que el objetivo se considere alcanzado, el despliegue debe funcionar por completo tras ejecutar
+     el comando docker-compose up)
+
+    5) Reorganización de los contenedores y servicios para su despliegue en un clúster Kubernetes. 
+    (NOTA: Para que el objetivo se considere alcanzado, el despliegue debe funcionar por completo tras ejecutar el comando kubectl apply -f <fichero>)
+    
+    6) Se valorará la simulación del comportamiento de los servicios mediante el empleo de 
+    herramientas de mocking tales como Stoplight Prism y Postman.
+
+    7) Se valorará la implementación de la API del servicio que cada grupo especificó en la primera práctica.
+
+    8) Se valorará el despliegue de la aplicación completa en una nube pública (Azure, AWS, Google Cloud, etc.). 
+    Incluir capturas de pantalla del despliegue en la memoria del paso 3.
+
+    https://github.com/SergioClaver/AOS-23.git -> Clientes
+
+    # SWAGGER-UI
+docker run -d -p 8000:8080 --rm --name aos2023_ui -e SWAGGER_JSON=/aos/openapi.yaml -v C:\Users\Alicia\Documents\Uni\2022-2023\SEGUNDO_CUATRI\AOS\p2\openapi:/aos swaggerapi/swagger-ui
+
+# SPECTRAL
+docker run --rm `
+    -v C:\Xampp\htdocs\AOS\AOS_2023\openapi:/aos `
+    stoplight/spectral lint --verbose `
+    --ruleset "/aos/.spectral.json" `
+    "/aos/openapi.yaml"
+
+# REDOCLY REDOC
+docker run -d --rm -p 8080:80 --name aos2023_redoc `
+   -v C:\Xampp\htdocs\AOS\AOS_2023\openapi\openapi.yaml:/usr/share/nginx/html/openapi.yaml `
+   -e SPEC_URL=openapi.yaml `
+   redocly/redoc
+
+# REDOCLY CLI
+# redocly/cli HELP
+docker run --rm `
+   redocly/cli --help
+
+# redocly/cli STATS
+docker run --rm `
+   -v C:\Xampp\htdocs\AOS\AOS_2023\openapi\openapi.yaml:/aos/openapi.yaml `
+   redocly/cli stats /aos/openapi.yaml
+
+# redocly/cli LINT
+docker run --rm `
+    -v C:\Xampp\htdocs\AOS\AOS_2023\openapi\openapi.yaml:/aos/openapi.yaml `
+    redocly/cli lint /aos/openapi.yaml
+
+# redocly/cli SPLIT
+docker run -it --rm `
+    -v C:\Xampp\htdocs\AOS\AOS_2023\openapi:/aos `
+    redocly/cli split /aos/openapi.yaml --outDir /aos/multiFile
+
+# STOPLIGHT-PRISM
+=============================================================================
+# url: https://meta.stoplight.io/docs/prism/README.md
+docker run --init --rm -it -p 80:4010 --name aos2023_mock `
+    -v C:\xampp\htdocs\AOS\AOS_2023\openapi:/aos `
+    stoplight/prism:4 mock --cors -h 0.0.0.0 "/aos/openapi.yaml"
