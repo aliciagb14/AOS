@@ -42,6 +42,10 @@ paths:
     $ref: 'trabajos.yaml#/paths/~1TrabajoDiarioEstados~1{EstadoTrabajo}'
   /TrabajoDiarioRecursos/{IdRecurso}:
     $ref: 'trabajos.yaml#/paths/~1TrabajoDiarioRecursos~1{IdRecurso}'
+  /facturas:
+    $ref: 'facturas.yaml#/paths/~1facturas'
+  /facturas/{facturaid}:
+    $ref: 'facturas.yaml#/paths/~1facturas~1{facturaid}'
 
 components:
   schemas:
@@ -51,4 +55,6 @@ components:
       $ref: 'vehiculos.yaml#/components/schemas/AllVehiculos'
     AllTrabajos:
       $ref: 'trabajos.yaml#/components/schemas/AllTrabajos'
+    AllFacturas:
+      $ref: 'facturas.yaml#/components/schemas/AllFacturas'
   
