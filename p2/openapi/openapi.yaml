@@ -49,7 +49,13 @@ paths:
   /logs:
     $ref: 'logs.yaml#/paths/~1logs' 
   /logs/{log_id}:
-    $ref: 'logs.yaml#/paths/~1logs~1{log_id}'    
+    $ref: 'logs.yaml#/paths/~1logs~1{log_id}' 
+  /notificaciones:
+    $ref: 'notificaciones.yaml#/paths/~1notificaciones'
+  /notificaciones/{notificacion_id}:
+    $ref: 'notificaciones.yaml#/paths/~1notificaciones~1{notificacion_id}'   
+  /notificaciones/trabajo/{trabajo_id}:
+    $ref: 'notificaciones.yaml#/paths/~1notificaciones~1trabajo~1{trabajo_id}'       
 
 components:
   schemas:
