@@ -47,9 +47,9 @@ paths:
   /facturas/{facturaid}:
     $ref: 'facturas.yaml#/paths/~1facturas~1{facturaid}'
   /logs:
-    $ref: 'recambios.yaml#/paths/~1logs' 
+    $ref: 'logs.yaml#/paths/~1logs' 
   /logs/{log_id}:
-    $ref: 'recambios.yaml#/paths/~1logs~1{log_id}'    
+    $ref: 'logs.yaml#/paths/~1logs~1{log_id}'    
 
 components:
   schemas:
