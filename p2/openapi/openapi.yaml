@@ -56,6 +56,11 @@ paths:
     $ref: 'notificaciones.yaml#/paths/~1notificaciones~1{notificacion_id}'   
   /notificaciones/trabajo/{trabajo_id}:
     $ref: 'notificaciones.yaml#/paths/~1notificaciones~1trabajo~1{trabajo_id}'
+  /recambios:
+    $ref: 'recambios.yaml#/paths/~1recambios'
+  /recambios/{Numero_Serie}:
+    $ref: 'recambios.yaml#/paths/~1recambios~1{Numero_Serie}'
+
 
 components:
   schemas:
@@ -71,3 +76,5 @@ components:
       $ref: 'logs.yaml#/components/schemas/AllLogs'
     AllNotificaciones:
       $ref: 'notificaciones.yaml#/components/schemas/AllNotificaciones'
+    AllRecambios:
+      $ref: 'recambios.yaml#/components/schemas/AllRecambios'
