@@ -1,6 +1,0 @@
-description: "Entitiy tag (Identificador único proporcionado para validación de caché)"
-schema:
-  type: string
-  pattern: "[0-9a-f]*"
-  example:
-    a4765bdc887fe

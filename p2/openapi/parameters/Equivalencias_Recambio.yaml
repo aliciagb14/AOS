@@ -1,6 +1,0 @@
-name: Equivalencias_Recambio
-in: query
-description: equivalencias de un recambio para un vehículo
-required: false
-schema:
-  $ref: '../schemas/Equivalencias_Recambio.yaml'
