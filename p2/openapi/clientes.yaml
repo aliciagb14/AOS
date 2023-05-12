@@ -28,15 +28,15 @@ paths:
       operationId: cliente_cget
       tags: [ 'Cliente' ]
       parameters:
-        - $ref: 'parameters.yaml#/pageParam'
-        - $ref: 'parameters.yaml#/orderParam'
-        - $ref: 'parameters.yaml#/orderingParam'
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/orderParam'
+        - $ref: '#/components/parameters/orderingParam'
       responses:
         '200':
           description: Lista de clientes
           headers:
             ETag:
-              $ref: 'headers.yaml#/ETag'
+              $ref: '#/components/headers/ETag'
           content:
             application/json:
               schema:
@@ -46,21 +46,21 @@ paths:
                     description: array de clientes
                     type: array
                     items:
-                      $ref: 'schemas.yaml#/Cliente'
+                      $ref: '#/components/schemas/Cliente'
                   links:
                     description: Enlaces de paginación
                     readOnly: true
                     type: object
                     properties:
                       prevPage:
-                        $ref: 'schemas.yaml#/Link'
+                        $ref: '#/components/schemas/Link'
                       nextPage:
-                        $ref: 'schemas.yaml#/Link'
+                        $ref: '#/components/schemas/Link'
               examples:
                 clientes-example:
-                  $ref: 'examples.yaml#/clientes-example'
+                  $ref: '#/components/examples/clientes-example'
         '404':
-          $ref: 'responses.yaml#/Response_404'
+          $ref: '#/components/responses/Response_404'
 
     options:
       summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
@@ -88,21 +88,21 @@ paths:
       tags: [ 'Cliente' ]
       operationId: cliente_post
       requestBody:
-        $ref: 'requestBodies.yaml#/clienteRB'
+        $ref: '#/components/requestBodies/clienteRB'
       responses:
         '201':
           description: Nuevo Cliente creado
           headers:
             Location:
-              $ref: 'headers.yaml#/Location'
+              $ref: '#/components/headers/Location'
           content:
             application/json:
               schema:
-                $ref: 'schemas.yaml#/Cliente'
+                $ref: '#/components/schemas/Cliente'
         '400':
-          $ref: 'responses.yaml#/Response_400'
+          $ref: '#/components/responses/Response_400'
         '422':
-          $ref: 'responses.yaml#/Response_422'
+          $ref: '#/components/responses/Response_422'
   
   /clientes/{cliente_id}:
     parameters:
@@ -117,7 +117,7 @@ paths:
           description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
           headers:
             Allow:
-              $ref: 'headers.yaml#/Allow'
+              $ref: '#/components/headers/Allow'
     get:
       summary: Obtiene un cliente identificado por `clienteId`
       description: |
@@ -134,13 +134,13 @@ paths:
           description: Cliente
           headers:
             ETag:
-              $ref: 'headers.yaml#/ETag'
+              $ref: '#/components/headers/ETag'
           content:
             application/json:
               schema:
-                $ref: 'schemas.yaml#/Cliente'
+                $ref: '#/components/schemas/Cliente'
         '404':
-          $ref: 'responses.yaml#/Response_404'
+          $ref: '#/components/responses/Response_404'
     delete:
       summary: Elimina el cliente identificada por `clienteId`
       description: |
@@ -156,7 +156,7 @@ paths:
         '204':
           description: Cliente eliminada &lt;Cuerpo de la respuesta vacío&gt;
         '404':
-          $ref: 'responses.yaml#/Response_404'
+          $ref: '#/components/responses/Response_404'
     put:
       tags: [ 'Cliente' ]
       summary: Modifica el cliente identificado por `clienteId`.
@@ -171,20 +171,20 @@ paths:
         | **422**     | UNPROCESSABLE ENTITY| Valor no permitido en alguno de los attributos|
       operationId: cliente_put
       parameters:
-        - $ref: 'parameters.yaml#/ifMatchParam'
+        - $ref: '#/components/parameters/ifMatchParam'
       responses:
         '209':
           description: '`CONTENT RETURNED`: el cliente ha sido actualizado'
           content:
             application/json:
               schema:
-                $ref: 'schemas.yaml#/Cliente'
+                $ref: '#/components/schemas/Cliente'
         '404':
-          $ref: 'responses.yaml#/Response_404'
+          $ref: '#/components/responses/Response_404'
         '412':
-          $ref: 'responses.yaml#/Response_412'
+          $ref: '#/components/responses/Response_412'
         '422':
-          $ref: 'responses.yaml#/Response_422'
+          $ref: '#/components/responses/Response_422'
 
 components:
   headers:
