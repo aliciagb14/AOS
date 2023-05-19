@@ -38,6 +38,8 @@ La consecución de este objetivo se planifica en las siguientes fases:
 
     # SWAGGER-UI
 docker run -d -p 8000:8080 --rm --name aos2023_ui -e SWAGGER_JSON=/aos/openapi.yaml -v C:\Users\Alicia\Documents\Uni\2022-2023\SEGUNDO_CUATRI\AOS\p2\openapi:/aos swaggerapi/swagger-ui
+docker run -d -p 8000:8080 --rm --name aos2023_ui -e SWAGGER_JSON=/aos/openapi.yaml -v C:\Users\Alicia\Downloads\AOS-main\AOS-main\p2\openapi:/aos swaggerapi/swagger-ui
+
 
 # SPECTRAL
 docker run --rm `
