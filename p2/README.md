@@ -32,5 +32,17 @@ Para crear la imagen de nuestro openapi hemos tenido que:
 3. Una vez hecho esto, ya podemos construir la imagen con: docker build -t img_all:v1 -f Dockerfile .
 4. Para guardar la imagen creada tendremos que ejecutar: docker save -o img_all_v1.tar img_all:v1
 5. Para cargar la imagen desde.tar y registrarla en el sistema Docker local haremos: docker load -i img_all_v1.tar
+  
+  
+Kubernetes:
+------
+1. Instalar un cluster con el que poder ejecutar Kubernetes, se ha elegido minikube el cual es una herramienta que permite ejecutar un clúster de Kubernetes de un solo nodo en un entorno local.
+2. Necesitaremos también la imagen de nuestro openapi subidda a algun repositorio de la nube.
+3. Crearemos un fichero .yaml en el cual especificaremos un deployment y un service.
+4. Iniciaremos el cluster con minikube start --driver=docker , esto lo haremos para correr el cluster sobre docker, sino podría coger otra forma de emulación como VirtualMachine.
+5. Usaremos el comando minikube config set driver docker para indicar que usaremos docker como forma de emulación por defecto, y podremos iniciar el cluster solo con el comando minikube start.
+6. Levantaremos el fichero .yaml previamente creado, este levantará un servicio el cual podrá ser accedido desde dentro del cluster, pero no desde fuera, esto s hará con el comando kubectl apply -f <fichero>
+7. Para poder acceder a nuestro servicio será necesario proporcionarle una IP externa, esto será hecho con el comando minikube service <nombre servicio>
+8. Este ultimo comando nos proporcionará una url con la que poder acceder al servicio desde el navegador o a través de la terminal. En equipos con sistema operativo Windows se nos abrirá el navegador directamente.
 
 
