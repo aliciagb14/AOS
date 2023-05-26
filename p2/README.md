@@ -17,11 +17,18 @@ La consecución de este objetivo se planifica en las siguientes fases:
 
 8. Se valorará el despliegue de la aplicación completa en una nube pública (Azure, AWS, Google Cloud, etc.). Incluir capturas de pantalla del despliegue en la memoria del paso 3.
 
-
+Unión de microservicios:
+------
+1. Crear un  schema en openapi.yaml llamado AllNombreMicroservicio para reunir los schemas de cada microservicio y que se visualice de forma más clara
+2. Dividir cada microservicio en un .yaml distinto para poder diferenciarlos mejor
+3. Dentro de nuestro openapi.yaml haremos dentro de path referencia a cada uno de los NombreMicroservicio.yaml para acceder a cada endpoint
+4. Con el comando: docker compose up, levantaremos todos los contenedores: swagger, stoplight y caddy (proxy)
+  
+  
 Para crear la imagen de nuestro openapi hemos tenido que:
 ------
-1. crear un Docker file con las reglas necesarias
-2. meter este Dockerfile en el mismo directorio en el que se encuentra openapi.yaml
+1. Crear un Docker file con las reglas necesarias
+2. Meter este Dockerfile en el mismo directorio en el que se encuentra openapi.yaml
 3. Una vez hecho esto, ya podemos construir la imagen con: docker build -t img_all:v1 -f Dockerfile .
 4. Para guardar la imagen creada tendremos que ejecutar: docker save -o img_all_v1.tar img_all:v1
 5. Para cargar la imagen desde.tar y registrarla en el sistema Docker local haremos: docker load -i img_all_v1.tar
