@@ -3,7 +3,7 @@ version: "3"
 services:
     mock_backend:
         image: stoplight/prism:4
-        container_name: p1_mock
+        container_name: p2_mock
         command: mock --cors -h 0.0.0.0 "/aos/openapi.yaml"
         ports:
           - "80:4010"
@@ -12,10 +12,21 @@ services:
 
     frontend:
         image: swaggerapi/swagger-ui:latest
-        container_name: p1_ui
+        container_name: p2_ui
         ports:
             - "8000:8080"
         environment:
             SWAGGER_JSON: /aos/openapi.yaml
         volumes:
             - ./openapi:/aos:ro
+    
+    proxy:
+        image: caddy:latest
+        container_name: p2_proxy
+        volumes:
+            - ./Caddyfile:/etc/caddy/Caddyfile
+            - ./caddy_data:/data
+        ports:
+            - "80:80"
+        depends_on:
+            - mock_backend

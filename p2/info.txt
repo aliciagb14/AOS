@@ -34,11 +34,9 @@ La consecución de este objetivo se planifica en las siguientes fases:
     8) Se valorará el despliegue de la aplicación completa en una nube pública (Azure, AWS, Google Cloud, etc.). 
     Incluir capturas de pantalla del despliegue en la memoria del paso 3.
 
-    https://github.com/SergioClaver/AOS-23.git -> Clientes
-
     # SWAGGER-UI
 docker run -d -p 8000:8080 --rm --name aos2023_ui -e SWAGGER_JSON=/aos/openapi.yaml -v C:\Users\Alicia\Documents\Uni\2022-2023\SEGUNDO_CUATRI\AOS\p2\openapi:/aos swaggerapi/swagger-ui
-docker run -d -p 8000:8080 --rm --name aos2023_ui -e SWAGGER_JSON=/aos/openapi.yaml -v C:\Users\Alicia\Downloads\AOS-main\AOS-main\p2\openapi:/aos swaggerapi/swagger-ui
+
 
 
 # SPECTRAL
